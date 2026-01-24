@@ -64,7 +64,7 @@ Con Free Tier: **$0 - $2/mes**
 ## 👤 Autor
 **Sergio Pulido**  
 Estudiante de Administración Financiera e Ingeniería de Sistemas  
-IST @ NTT Data
+
 
 ## 📚 Referencias
 - [Curso AWS SAA-C03](https://www.udemy.com/course/aws-certified-solutions-architect-associate-saa-c03/)
