@@ -8,7 +8,7 @@ import json
 import sys
 
 # TODO: Reemplazar con tu API Key real de Alpha Vantage
-API_KEY = "demo"  # Cambiar después de registrarte
+API_KEY = "8WZM1HVQYVHLQY57"  # Cambiar después de registrarte
 SYMBOL = "IBM"
 
 def test_alpha_vantage_connection():
