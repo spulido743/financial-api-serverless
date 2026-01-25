@@ -1,0 +1,10 @@
+{
+    "Label": "Invocations",
+    "Datapoints": [
+        {
+            "Timestamp": "2026-01-25T00:07:00+00:00",
+            "Sum": 13.0,
+            "Unit": "Count"
+        }
+    ]
+}

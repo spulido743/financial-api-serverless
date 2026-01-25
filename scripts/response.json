@@ -1,0 +1,1 @@
+{"statusCode": 200, "headers": {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"}, "body": "{\"message\": \"Precio de TEST guardado exitosamente\", \"data\": {\"symbol\": \"TEST\", \"price\": 999.99, \"timestamp\": 1769303103, \"date\": \"2026-01-25T01:05:03.949353\"}}"}

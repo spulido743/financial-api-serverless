@@ -1,0 +1,41 @@
+🧪 Testing Lambda Function: saveStockPrice
+==========================================
+
+[1;33m▶ Test: AAPL - Valid input[0m
+[0;32m✅ PASS[0m - Status: 200
+   Response: {"statusCode": 200, "headers": {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"}, "body": "{\"message\": \"Precio de AAPL guardado exitosamente\", \"data\": {\"symbol\": \"AAPL\", \"price\": 182.75, \"timestamp\": 1769302986, \"date\": \"2026-01-25T01:03:06.101837\"}}"}
+
+[1;33m▶ Test: GOOGL - Valid input[0m
+[0;32m✅ PASS[0m - Status: 200
+   Response: {"statusCode": 200, "headers": {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"}, "body": "{\"message\": \"Precio de GOOGL guardado exitosamente\", \"data\": {\"symbol\": \"GOOGL\", \"price\": 145.3, \"timestamp\": 1769302986, \"date\": \"2026-01-25T01:03:06.839529\"}}"}
+
+[1;33m▶ Test: MSFT - Valid input[0m
+[0;32m✅ PASS[0m - Status: 200
+   Response: {"statusCode": 200, "headers": {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"}, "body": "{\"message\": \"Precio de MSFT guardado exitosamente\", \"data\": {\"symbol\": \"MSFT\", \"price\": 412.8, \"timestamp\": 1769302987, \"date\": \"2026-01-25T01:03:07.560802\"}}"}
+
+[1;33m▶ Test: Missing price field[0m
+[0;32m✅ PASS[0m - Status: 400
+   Response: {"statusCode": 400, "body": "{\"error\": \"Missing required field: price\", \"message\": \"Debe proporcionar el precio de la acci\\u00f3n\"}"}
+
+==========================================
+✅ Tests completados
+
+📊 Datos en DynamoDB:
+---------------------
+|       Scan        |
++--------+----------+
+|  NVDA  |  615.3   |
+|  TSLA  |  238.45  |
+|  GOOGL |  142.8   |
+|  GOOGL |  145.3   |
+|  GOOGL |  145.3   |
+|  GOOGL |  145.3   |
+|  AAPL  |  180.5   |
+|  AAPL  |  182.75  |
+|  AAPL  |  182.75  |
+|  AAPL  |  182.75  |
+|  MSFT  |  405.2   |
+|  MSFT  |  412.8   |
+|  MSFT  |  412.8   |
+|  MSFT  |  412.8   |
++--------+----------+

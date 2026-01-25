@@ -1,0 +1,12 @@
+{
+    "AttachedPolicies": [
+        {
+            "PolicyName": "FinancialAPI-DynamoDB-Policy",
+            "PolicyArn": "arn:aws:iam::318774499588:policy/FinancialAPI-DynamoDB-Policy"
+        },
+        {
+            "PolicyName": "AWSLambdaBasicExecutionRole",
+            "PolicyArn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        }
+    ]
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "date": "2026-01-24T15:50:00Z",
+    "price": 615.3,
+    "symbol": "NVDA",
+    "timestamp": 1706098200.0
+  },
+  {
+    "date": "2026-01-24T15:45:00Z",
+    "price": 238.45,
+    "symbol": "TSLA",
+    "timestamp": 1706097900.0
+  },
+  {
+    "date": "2026-01-24T15:35:00Z",
+    "price": 142.8,
+    "symbol": "GOOGL",
+    "timestamp": 1706097300.0
+  },
+  {
+    "date": "2026-01-24T15:30:00Z",
+    "price": 180.5,
+    "symbol": "AAPL",
+    "timestamp": 1706097000.0
+  },
+  {
+    "date": "2026-01-24T15:40:00Z",
+    "price": 405.2,
+    "symbol": "MSFT",
+    "timestamp": 1706097600.0
+  }
+]
