@@ -1,0 +1,18 @@
+{
+    "id": "rd99h9lf9h",
+    "name": "Financial-API",
+    "description": "API REST para consultar y almacenar datos financieros",
+    "createdDate": "2026-01-29T20:15:19+00:00",
+    "apiKeySource": "HEADER",
+    "endpointConfiguration": {
+        "types": [
+            "REGIONAL"
+        ],
+        "ipAddressType": "ipv4"
+    },
+    "tags": {},
+    "disableExecuteApiEndpoint": false,
+    "rootResourceId": "5rrfy2m9bi",
+    "securityPolicy": "TLS_1_0",
+    "apiStatus": "AVAILABLE"
+}

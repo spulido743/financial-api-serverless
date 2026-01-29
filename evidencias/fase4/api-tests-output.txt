@@ -1,0 +1,32 @@
+🧪 Testing Financial API
+========================
+Endpoint: https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod/stock
+
+📊 Test 1: Guardar AAPL
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   267  100   158  100   109   2081   1436 --:--:-- --:--:-- --:--:--  3560
+Extra data: line 2 column 1 (char 159)
+
+📊 Test 2: Guardar GOOGL
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   218  100   160  100    58   3928   1424 --:--:-- --:--:-- --:--:--  5450
+Extra data: line 2 column 1 (char 161)
+
+❌ Test 3: Error - Sin symbol
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   140  100   109  100    31   2369    674 --:--:-- --:--:-- --:--:--  3111
+Extra data: line 2 column 1 (char 110)
+
+❌ Test 4: Error - Sin price
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   134  100   102  100    32   1568    492 --:--:-- --:--:-- --:--:--  2093
+Extra data: line 2 column 1 (char 103)
+
+📊 Verificando datos en DynamoDB...
+23
+
+✅ Tests completados

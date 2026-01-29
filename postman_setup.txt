@@ -1,0 +1,34 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONFIGURACIÓN POSTMAN - Financial API
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📡 URL BASE:
+https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod
+
+📍 ENDPOINT: POST /stock
+URL COMPLETA:
+https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod/stock
+
+📋 HEADERS:
+Content-Type: application/json
+
+📦 BODY (JSON):
+{
+  "symbol": "AAPL",
+  "price": 185.50,
+  "volume": 60000000,
+  "change": 4.25,
+  "change_percent": 2.35
+}
+
+✅ RESPUESTA ESPERADA (200):
+{
+  "statusCode": 200,
+  "headers": {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*"
+  },
+  "body": "{\"message\": \"Precio de AAPL guardado exitosamente\", ...}"
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

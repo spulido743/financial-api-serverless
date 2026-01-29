@@ -1,0 +1,9 @@
+{
+    "id": "wbezo2",
+    "parentId": "5rrfy2m9bi",
+    "pathPart": "stock",
+    "path": "/stock",
+    "resourceMethods": {
+        "POST": {}
+    }
+}
