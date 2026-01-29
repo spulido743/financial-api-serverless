@@ -1,0 +1,6 @@
+{
+  "pathParameters": {
+    "symbol": "NOTFOUND"
+  },
+  "httpMethod": "GET"
+}
