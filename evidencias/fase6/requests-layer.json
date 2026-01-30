@@ -1,0 +1,17 @@
+{
+    "Content": {
+        "Location": "https://prod-04-2014-layers.s3.us-east-1.amazonaws.com/snapshots/318774499588/requests-layer-d84e0173-9826-4371-bdca-5a75c9e04262?versionId=YIWJh0g40CMrnN8QwQAE21H6pyAZI47i&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEMr%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQCgw%2BNmUj8oir%2Bl55Z%2FEapDhf7Z0STyldyiyVqJUm7TJQIhAJYqYUJfn7aEzcXJk06RA6jxLHnz6w43e8sBgeKEtsuyKroFCJP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMNzQ5Njc4OTAyODM5IgwM%2FutrqHxTEAai%2BEEqjgWpDLvufNG%2FAXFKoNtpyRVf6Kbuu4fblYePY08%2FIpFxXbnIwOjk%2FhOGkhqrHG7SKahG2VgwM3d4wAO6AR6Buem3RNm2ebngXeQntJC1K5HszMdYEwNl9APZo%2BdIX14d0YxCwX6AA%2BqJHNC%2FAKft2fh1GQWDHwLCoIUjMvn9YGrT6H6bPUtCVSZrIkUAqB3wVrkRWChxqdinFAc6JbpBr%2Bwnx885rgPxGhZCNv0heY%2F%2FjdI0dsMzri2Vh4z1fGXM2mUawxkbWGanYUAsLOrgFpHTNj3%2FyszAr21ug7pbboy0JE8G2h20H1a6PEYzhdwxrD35WBa12r1Xjbn5%2Fl8UkOD1dmojrFrb3QMPDs49LNNfgigdgtEyYrp3%2BIHUwVzVVI4wdgh4b3B6NLyGRwCdcucJNwghhscSc5SDue8V8k%2BfHxI211%2FAvjn%2B26ySxgH0vRRet%2BCOEnw1scOtPE5m12Brzx1HiVA94zBBfoqQujpGUO1zkffogczqqyHyL65yvePWO%2Fub1CFx4l0k57wdFnpw9R1OegRy%2BL5wJ3F8RFiGL0g5IDvGucqlsP2hG7a79xjzs7rFBgdQz6FzX5lsz1etls997YGsuX6Z9uI63VvZqMvtW%2FbGzctTR6RTSWw%2FLZIHkJ06PxyKYhJx5nDGywyX8ygpjUUPEmdOlp6BgW%2BjNr%2BbZvVneXgE4%2FJy3eB96fM%2Fmrl5I%2F3TFtzZga47GSVO8y494OnsOluMk3%2FN78otlXyGYcRynG0HoEUXK6JDGL%2Byw8ZmtxRMd%2BPD%2Ftg24%2BLSuuzC9JPNeXdSHbpcwl9L%2BEOXtLsGfgF0C59W7lvrtB%2BNAGvvEU846BkPMhMpuHwwKEsKIbQIPj1yIK28MwUwqZTwywY6sAF%2FDUAzOmaKIKz6y7dsPiEUhGesXHSkH9PZK63zMbxevwn2a0n1vLdQCa6pyGRjE%2FLtE2x61PhUpKCK236I1XDAz52A5eGtZsVtXuHfvon5vMoYx3fNppMkzQifkj%2BsLXQ5Xph2BGux6Jjvfl4M6m1t1BaaVgDi3BFT9moudvnEDY%2F%2B2LVKy3%2F7hLKclrV%2BEt4hrnZlcT0ihFa6Q0wVztau5kj5GksYFPlL9z85HRh5mg%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260130T024323Z&X-Amz-SignedHeaders=host&X-Amz-Expires=600&X-Amz-Credential=ASIA25DCYHY36EQD5FUE%2F20260130%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=b90717f1aec4d95b32807edc5e7a757e44bd8b849fceeafcb72778bfef50690a",
+        "CodeSha256": "nQNko5YOh1HjiSybBeflhdaKXjklYhtxQaqmZ69tEuk=",
+        "CodeSize": 931183
+    },
+    "LayerArn": "arn:aws:lambda:us-east-1:318774499588:layer:requests-layer",
+    "LayerVersionArn": "arn:aws:lambda:us-east-1:318774499588:layer:requests-layer:1",
+    "Description": "Python requests library for HTTP calls to external APIs",
+    "CreatedDate": "2026-01-30T02:43:01.803+0000",
+    "Version": 1,
+    "CompatibleRuntimes": [
+        "python3.11",
+        "python3.10",
+        "python3.9"
+    ]
+}

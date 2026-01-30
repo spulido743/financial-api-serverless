@@ -1,0 +1,50 @@
+{
+    "FunctionName": "fetchRealTimePrice",
+    "FunctionArn": "arn:aws:lambda:us-east-1:318774499588:function:fetchRealTimePrice",
+    "Runtime": "python3.11",
+    "Role": "arn:aws:iam::318774499588:role/FinancialAPI-Lambda-Role",
+    "Handler": "lambda_function.lambda_handler",
+    "CodeSize": 2302,
+    "Description": "Obtiene precios reales desde Alpha Vantage y los guarda en DynamoDB",
+    "Timeout": 30,
+    "MemorySize": 128,
+    "LastModified": "2026-01-30T02:47:29.235+0000",
+    "CodeSha256": "QmAIhzn99BtWatgu0UyEmBJFn+3O45UdR7vdZzRo4Ow=",
+    "Version": "$LATEST",
+    "Environment": {
+        "Variables": {
+            "TABLE_NAME": "FinancialData",
+            "ALPHA_VANTAGE_API_KEY": "8WZM1HVQYVHLQY57"
+        }
+    },
+    "TracingConfig": {
+        "Mode": "PassThrough"
+    },
+    "RevisionId": "3de77e75-7387-4663-97c1-9e6d0a84c054",
+    "Layers": [
+        {
+            "Arn": "arn:aws:lambda:us-east-1:318774499588:layer:requests-layer:1",
+            "CodeSize": 931183
+        }
+    ],
+    "State": "Active",
+    "LastUpdateStatus": "Successful",
+    "PackageType": "Zip",
+    "Architectures": [
+        "x86_64"
+    ],
+    "EphemeralStorage": {
+        "Size": 512
+    },
+    "SnapStart": {
+        "ApplyOn": "None",
+        "OptimizationStatus": "Off"
+    },
+    "RuntimeVersionConfig": {
+        "RuntimeVersionArn": "arn:aws:lambda:us-east-1::runtime:d66b93d39c62355ef595cacc2d473507280d32dae3ddab0642986a3782101c39"
+    },
+    "LoggingConfig": {
+        "LogFormat": "Text",
+        "LogGroup": "/aws/lambda/fetchRealTimePrice"
+    }
+}
