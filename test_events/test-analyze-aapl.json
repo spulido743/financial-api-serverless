@@ -1,0 +1,6 @@
+{
+  "pathParameters": {
+    "symbol": "AAPL"
+  },
+  "httpMethod": "GET"
+}

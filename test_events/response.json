@@ -1,1 +1,1 @@
-{"statusCode": 404, "headers": {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"}, "body": "{\"error\": \"Symbol not found\", \"message\": \"No se encontraron datos para el s\\u00edmbolo NOTFOUND\"}"}
+{"statusCode": 500, "headers": {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"}, "body": "{\"error\": \"Internal server error\", \"message\": \"'>' not supported between instances of 'float' and 'NoneType'\"}"}
