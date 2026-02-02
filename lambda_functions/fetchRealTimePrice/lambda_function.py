@@ -1,7 +1,7 @@
 """
-Lambda Function: fetchRealTimePrice
-Descripción: Obtiene precio real de una acción desde Alpha Vantage y lo guarda en DynamoDB
-Trigger: API Gateway POST /stock/fetch/{symbol}
+Lambda Function: fetchRealTimePrice (ENHANCED FOR EVENTBRIDGE)
+Descripción: Obtiene precios reales desde Alpha Vantage
+Puede procesar múltiples símbolos cuando es invocada por EventBridge
 """
 
 import json
@@ -15,21 +15,26 @@ import os
 ALPHA_VANTAGE_API_KEY = os.environ.get('ALPHA_VANTAGE_API_KEY')
 ALPHA_VANTAGE_URL = "https://www.alphavantage.co/query"
 
+# Lista de símbolos a monitorear (WATCHLIST)
+# Lee desde variable de entorno o usa default
+watchlist_env = os.environ.get('WATCHLIST', '')
+if watchlist_env:
+    DEFAULT_WATCHLIST = [s.strip() for s in watchlist_env.split(',')]
+else:
+    DEFAULT_WATCHLIST = [
+        'AAPL', 'GOOGL', 'MSFT', 'AMZN', 'META',
+        'NVDA', 'TSLA', 'IBM', 'JPM', 'V'
+    ]
+
+print(f"📋 Watchlist configurada: {DEFAULT_WATCHLIST}")
+
 # Cliente DynamoDB
 dynamodb = boto3.resource('dynamodb')
 table_name = os.environ.get('TABLE_NAME', 'FinancialData')
 table = dynamodb.Table(table_name)
 
 def fetch_stock_data(symbol):
-    """
-    Obtener datos de Alpha Vantage
-    
-    Args:
-        symbol: Símbolo de la acción (ej: AAPL)
-    
-    Returns:
-        dict con datos de la acción o None si hay error
-    """
+    """Obtener datos de Alpha Vantage"""
     
     if not ALPHA_VANTAGE_API_KEY:
         raise ValueError("ALPHA_VANTAGE_API_KEY no configurada")
@@ -45,33 +50,18 @@ def fetch_stock_data(symbol):
     try:
         response = requests.get(ALPHA_VANTAGE_URL, params=params, timeout=10)
         response.raise_for_status()
-        
         data = response.json()
         
-        print(f"📡 Respuesta de Alpha Vantage: {json.dumps(data)[:200]}...")
-        
-        # Verificar si hay datos
         if "Global Quote" not in data:
             if "Note" in data:
-                # Rate limit alcanzado
-                return {
-                    'error': 'rate_limit',
-                    'message': 'Rate limit de Alpha Vantage alcanzado. Espera 1 minuto.'
-                }
+                return {'error': 'rate_limit', 'message': 'Rate limit alcanzado'}
             elif "Error Message" in data:
-                return {
-                    'error': 'invalid_symbol',
-                    'message': f'Símbolo inválido: {symbol}'
-                }
+                return {'error': 'invalid_symbol', 'message': f'Símbolo inválido: {symbol}'}
             else:
-                return {
-                    'error': 'no_data',
-                    'message': 'No se recibieron datos de Alpha Vantage'
-                }
+                return {'error': 'no_data', 'message': 'Sin datos'}
         
         quote = data["Global Quote"]
         
-        # Extraer datos relevantes
         stock_data = {
             'symbol': quote.get("01. symbol", symbol),
             'price': float(quote.get("05. price", 0)),
@@ -82,36 +72,15 @@ def fetch_stock_data(symbol):
             'change_percent': quote.get("10. change percent", "0%").replace("%", "")
         }
         
-        print(f"✅ Datos obtenidos: ${stock_data['price']}")
-        
+        print(f"✅ {symbol}: ${stock_data['price']}")
         return stock_data
         
-    except requests.exceptions.Timeout:
-        return {
-            'error': 'timeout',
-            'message': 'Timeout al consultar Alpha Vantage'
-        }
-    except requests.exceptions.RequestException as e:
-        return {
-            'error': 'network_error',
-            'message': f'Error de red: {str(e)}'
-        }
     except Exception as e:
-        return {
-            'error': 'unknown',
-            'message': f'Error inesperado: {str(e)}'
-        }
+        print(f"❌ Error obteniendo {symbol}: {str(e)}")
+        return {'error': 'exception', 'message': str(e)}
 
 def save_to_dynamodb(stock_data):
-    """
-    Guardar datos en DynamoDB
-    
-    Args:
-        stock_data: dict con datos de la acción
-    
-    Returns:
-        True si se guardó exitosamente
-    """
+    """Guardar en DynamoDB"""
     
     try:
         timestamp = int(datetime.now().timestamp())
@@ -129,112 +98,110 @@ def save_to_dynamodb(stock_data):
             'latest_trading_day': stock_data['latest_trading_day']
         }
         
-        print(f"💾 Guardando en DynamoDB: {stock_data['symbol']} = ${stock_data['price']}")
-        
-        response = table.put_item(Item=item)
-        
-        print(f"✅ Guardado exitosamente")
-        
+        table.put_item(Item=item)
         return True
         
     except Exception as e:
-        print(f"❌ Error al guardar en DynamoDB: {str(e)}")
-        raise
+        print(f"❌ Error guardando {stock_data['symbol']}: {str(e)}")
+        return False
 
 def lambda_handler(event, context):
-    """
-    Handler principal de la función Lambda
-    """
+    """Handler principal - Soporta API Gateway y EventBridge"""
     
     print(f"📥 Event recibido: {json.dumps(event, default=str)}")
     
-    try:
-        # Obtener símbolo del path parameter
-        if 'pathParameters' not in event or not event['pathParameters']:
-            return {
-                'statusCode': 400,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
-                'body': json.dumps({
-                    'error': 'Missing path parameter',
-                    'message': 'Debe proporcionar el símbolo en la URL: /stock/fetch/{symbol}'
-                })
-            }
+    # Determinar el origen del evento
+    is_from_eventbridge = 'source' in event and event['source'] == 'aws.events'
+    is_from_api_gateway = 'pathParameters' in event
+    
+    symbols_to_process = []
+    
+    if is_from_eventbridge:
+        # EventBridge: procesar watchlist completa
+        print("🤖 Invocación desde EventBridge - Procesando watchlist")
+        symbols_to_process = DEFAULT_WATCHLIST
         
+    elif is_from_api_gateway:
+        # API Gateway: procesar un símbolo específico
         symbol = event['pathParameters'].get('symbol', '').upper()
-        
         if not symbol:
             return {
                 'statusCode': 400,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
-                'body': json.dumps({
-                    'error': 'Invalid symbol',
-                    'message': 'El símbolo no puede estar vacío'
-                })
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'error': 'Invalid symbol'})
             }
+        symbols_to_process = [symbol]
         
-        print(f"🎯 Procesando símbolo: {symbol}")
-        
-        # Obtener datos de Alpha Vantage
+    else:
+        # Invocación directa con símbolos personalizados
+        symbols_to_process = event.get('symbols', DEFAULT_WATCHLIST)
+    
+    print(f"📊 Procesando {len(symbols_to_process)} símbolos: {symbols_to_process}")
+    
+    results = {
+        'processed': 0,
+        'successful': 0,
+        'failed': 0,
+        'rate_limited': 0,
+        'details': []
+    }
+    
+    for symbol in symbols_to_process:
         stock_data = fetch_stock_data(symbol)
         
-        # Verificar si hubo error
         if isinstance(stock_data, dict) and 'error' in stock_data:
-            status_code = 429 if stock_data['error'] == 'rate_limit' else 400
+            results['failed'] += 1
+            if stock_data['error'] == 'rate_limit':
+                results['rate_limited'] += 1
+            results['details'].append({
+                'symbol': symbol,
+                'status': 'error',
+                'message': stock_data['message']
+            })
+        else:
+            if save_to_dynamodb(stock_data):
+                results['successful'] += 1
+                results['details'].append({
+                    'symbol': symbol,
+                    'status': 'success',
+                    'price': stock_data['price']
+                })
+            else:
+                results['failed'] += 1
+                results['details'].append({
+                    'symbol': symbol,
+                    'status': 'error',
+                    'message': 'Error saving to DynamoDB'
+                })
+        
+        results['processed'] += 1
+    
+    print(f"✅ Procesamiento completo: {results['successful']}/{results['processed']} exitosos")
+    
+    # Respuesta según origen
+    if is_from_api_gateway:
+        # API Gateway espera formato específico
+        if results['successful'] > 0:
+            detail = results['details'][0]
             return {
-                'statusCode': status_code,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
+                'statusCode': 200,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
                 'body': json.dumps({
-                    'error': stock_data['error'],
-                    'message': stock_data['message'],
-                    'symbol': symbol
+                    'message': f"Precio de {detail['symbol']} actualizado",
+                    'symbol': detail['symbol'],
+                    'price': detail.get('price'),
+                    'source': 'alpha_vantage'
                 })
             }
-        
-        # Guardar en DynamoDB
-        save_to_dynamodb(stock_data)
-        
-        # Respuesta exitosa
+        else:
+            return {
+                'statusCode': 400,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'error': results['details'][0]['message']})
+            }
+    else:
+        # EventBridge o invocación directa
         return {
             'statusCode': 200,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-            'body': json.dumps({
-                'message': f'Precio de {symbol} actualizado desde Alpha Vantage',
-                'symbol': stock_data['symbol'],
-                'price': stock_data['price'],
-                'change': stock_data['change'],
-                'change_percent': f"{stock_data['change_percent']}%",
-                'volume': stock_data['volume'],
-                'latest_trading_day': stock_data['latest_trading_day'],
-                'timestamp': int(datetime.now().timestamp()),
-                'source': 'alpha_vantage'
-            })
-        }
-        
-    except Exception as e:
-        print(f"❌ Error inesperado: {str(e)}")
-        import traceback
-        traceback.print_exc()
-        
-        return {
-            'statusCode': 500,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-            'body': json.dumps({
-                'error': 'Internal server error',
-                'message': str(e)
-            })
+            'body': json.dumps(results)
         }

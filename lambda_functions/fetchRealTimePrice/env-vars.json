@@ -1,0 +1,7 @@
+{
+  "Variables": {
+    "ALPHA_VANTAGE_API_KEY": "8WZM1HVQYVHLQY57",
+    "TABLE_NAME": "FinancialData",
+    "WATCHLIST": "AAPL,GOOGL,MSFT,AMZN,META,NVDA,TSLA,IBM,JPM,V"
+  }
+}
