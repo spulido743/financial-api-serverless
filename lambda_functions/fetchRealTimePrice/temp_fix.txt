@@ -1,0 +1,31 @@
+        # Determinar símbolos a procesar
+        if is_from_eventbridge:
+            print("🤖 EventBridge invocation - Processing watchlist")
+            symbols_to_process = DEFAULT_WATCHLIST
+            
+        elif is_from_api_gateway:
+            # Validar que pathParameters tenga contenido
+            if not event.get('pathParameters') or not event['pathParameters'].get('symbol'):
+                return create_response(400, {
+                    'error': 'missing_parameter',
+                    'message': 'Path parameter {symbol} is required'
+                })
+            
+            symbol = event['pathParameters'].get('symbol', '').strip().upper()
+            
+            # Validar símbolo
+            is_valid, result = validate_symbol(symbol)
+            if not is_valid:
+                return create_response(400, {
+                    'error': 'invalid_symbol',
+                    'message': result
+                })
+            
+            symbols_to_process = [result]
+            
+        else:
+            # Evento sin pathParameters ni source - inválido
+            return create_response(400, {
+                'error': 'invalid_invocation',
+                'message': 'Event must come from API Gateway or EventBridge'
+            })

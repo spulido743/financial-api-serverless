@@ -117,7 +117,7 @@ def query_historical_data(symbol, days, limit=None):
     try:
         # Calcular timestamps
         end_time = int(datetime.now().timestamp())
-        start_time = end_time - (days * 86400)  # 86400 segundos en un día
+        start_time = end_time - (days * 86400)
         
         print(f"🔍 Querying {symbol} from {datetime.fromtimestamp(start_time)} to {datetime.fromtimestamp(end_time)}")
         
@@ -132,10 +132,9 @@ def query_historical_data(symbol, days, limit=None):
                 ':start': start_time,
                 ':end': end_time
             },
-            'ScanIndexForward': False  # Orden descendente (más recientes primero)
+            'ScanIndexForward': False
         }
         
-        # Agregar límite si se especifica
         if limit:
             query_params['Limit'] = limit
         
@@ -155,28 +154,17 @@ def query_historical_data(symbol, days, limit=None):
 # ==================== LAMBDA HANDLER ====================
 
 def lambda_handler(event, context):
-    """
-    Handler principal con error handling robusto
-    
-    Path parameters:
-        - symbol: Stock symbol (required)
-    
-    Query parameters:
-        - days: Number of days of history (default: 7, max: 365)
-        - limit: Maximum number of records (default: none, max: 1000)
-    """
+    """Handler principal con error handling robusto"""
     
     print(f"📥 Event received: {json.dumps(event, default=str)}")
     
     try:
-        # Validar estructura del evento
         if 'pathParameters' not in event:
             return create_response(400, {
                 'error': 'missing_parameters',
                 'message': 'Path parameter {symbol} is required'
             })
         
-        # Obtener y validar símbolo
         symbol = event['pathParameters'].get('symbol', '').strip().upper()
         
         is_valid, result = validate_symbol(symbol)
@@ -188,10 +176,8 @@ def lambda_handler(event, context):
         
         symbol = result
         
-        # Obtener y validar query parameters
         query_params = event.get('queryStringParameters') or {}
         
-        # Validar days
         days_str = query_params.get('days', '7')
         is_valid, days_result = validate_days(days_str)
         if not is_valid:
@@ -202,7 +188,6 @@ def lambda_handler(event, context):
         
         days = days_result
         
-        # Validar limit (opcional)
         limit = None
         if 'limit' in query_params:
             is_valid, limit_result = validate_limit(query_params['limit'])
@@ -216,7 +201,6 @@ def lambda_handler(event, context):
         print(f"📊 Fetching {days} days of history for {symbol}" + 
               (f" (limit: {limit})" if limit else ""))
         
-        # Query DynamoDB
         success, result = query_historical_data(symbol, days, limit)
         
         if not success:
@@ -225,7 +209,6 @@ def lambda_handler(event, context):
                 'message': result
             })
         
-        # Verificar si hay datos
         if not result:
             return create_response(404, {
                 'error': 'no_data',
@@ -234,7 +217,6 @@ def lambda_handler(event, context):
                 'days': days
             })
         
-        # Formatear respuesta
         response_data = {
             'symbol': symbol,
             'days': days,
@@ -248,7 +230,6 @@ def lambda_handler(event, context):
         return create_response(200, response_data)
     
     except Exception as e:
-        # Catch-all para errores inesperados
         error_trace = traceback.format_exc()
         print(f"❌ Unexpected error: {error_trace}")
         

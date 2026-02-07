@@ -1,0 +1,582 @@
+{
+	"info": {
+		"_postman_id": "financial-api-a86d3e3f-fca4-4b00-8e48-8c74a0545f32",
+		"name": "Financial API - Serverless",
+		"description": "Colección completa de endpoints para la API financiera serverless en AWS.\n\n**Arquitectura:** Lambda + API Gateway + DynamoDB\n**Región:** us-east-1\n**Autor:** SergioPulid0\n**Versión:** 2.0",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Price Endpoints",
+			"description": "Endpoints para obtener precios de acciones en tiempo real",
+			"item": [
+				{
+					"name": "Get Real-Time Price - AAPL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has data\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('data');",
+									"});",
+									"",
+									"pm.test(\"Symbol is AAPL\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.symbol).to.eql('AAPL');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod/price/AAPL",
+							"protocol": "https",
+							"host": [
+								"rd99h9lf9h",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"price",
+								"AAPL"
+							]
+						},
+						"description": "Obtiene el precio actual de Apple (AAPL) desde Alpha Vantage y lo guarda en DynamoDB.\n\n**Response esperado:**\n- statusCode: 200\n- Datos del precio actual\n- Timestamp de actualización"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Real-Time Price - GOOGL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod/price/GOOGL",
+							"protocol": "https",
+							"host": [
+								"rd99h9lf9h",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"price",
+								"GOOGL"
+							]
+						},
+						"description": "Obtiene el precio actual de Google (GOOGL)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Real-Time Price - NVDA",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod/price/NVDA",
+							"protocol": "https",
+							"host": [
+								"rd99h9lf9h",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"price",
+								"NVDA"
+							]
+						},
+						"description": "Obtiene el precio actual de NVIDIA (NVDA)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Real-Time Price - Invalid Symbol",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 or 404\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([400, 404]);",
+									"});",
+									"",
+									"pm.test(\"Response has error message\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('error');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod/price/INVALID123",
+							"protocol": "https",
+							"host": [
+								"rd99h9lf9h",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"price",
+								"INVALID123"
+							]
+						},
+						"description": "Test de validación - símbolo inválido debe retornar error 400."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. Historical Data",
+			"description": "Endpoints para consultar datos históricos",
+			"item": [
+				{
+					"name": "Get Historical - AAPL (7 days)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 or 404\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 404]);",
+									"});",
+									"",
+									"if (pm.response.code === 200) {",
+									"    pm.test(\"Response has data array\", function () {",
+									"        var jsonData = pm.response.json();",
+									"        pm.expect(jsonData).to.have.property('data');",
+									"        pm.expect(jsonData.data).to.be.an('array');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod/historical/AAPL?days=7",
+							"protocol": "https",
+							"host": [
+								"rd99h9lf9h",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"historical",
+								"AAPL"
+							],
+							"query": [
+								{
+									"key": "days",
+									"value": "7",
+									"description": "Número de días de histórico (1-365)"
+								}
+							]
+						},
+						"description": "Obtiene histórico de precios de AAPL de los últimos 7 días desde DynamoDB."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Historical - MSFT (30 days)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod/historical/MSFT?days=30",
+							"protocol": "https",
+							"host": [
+								"rd99h9lf9h",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"historical",
+								"MSFT"
+							],
+							"query": [
+								{
+									"key": "days",
+									"value": "30"
+								}
+							]
+						},
+						"description": "Obtiene histórico de 30 días de Microsoft."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Historical - With Limit",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod/historical/AAPL?days=30&limit=10",
+							"protocol": "https",
+							"host": [
+								"rd99h9lf9h",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"historical",
+								"AAPL"
+							],
+							"query": [
+								{
+									"key": "days",
+									"value": "30"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Máximo de registros a retornar (1-1000)"
+								}
+							]
+						},
+						"description": "Obtiene máximo 10 registros del histórico de 30 días."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Historical - Invalid Days",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Error message present\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.error).to.exist;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod/historical/AAPL?days=500",
+							"protocol": "https",
+							"host": [
+								"rd99h9lf9h",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"historical",
+								"AAPL"
+							],
+							"query": [
+								{
+									"key": "days",
+									"value": "500",
+									"description": "Valor inválido (máximo 365)"
+								}
+							]
+						},
+						"description": "Test de validación - days > 365 debe retornar error 400."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. Technical Indicators",
+			"description": "Endpoints para calcular indicadores técnicos",
+			"item": [
+				{
+					"name": "Calculate Indicators - AAPL (Period 14)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200, 400, or 404\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 400, 404]);",
+									"});",
+									"",
+									"if (pm.response.code === 200) {",
+									"    pm.test(\"Response has indicators\", function () {",
+									"        var jsonData = pm.response.json();",
+									"        pm.expect(jsonData).to.have.property('indicators');",
+									"        pm.expect(jsonData.indicators).to.have.property('rsi');",
+									"        pm.expect(jsonData.indicators).to.have.property('sma');",
+									"        pm.expect(jsonData.indicators).to.have.property('ema');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod/indicators/AAPL?period=14",
+							"protocol": "https",
+							"host": [
+								"rd99h9lf9h",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"indicators",
+								"AAPL"
+							],
+							"query": [
+								{
+									"key": "period",
+									"value": "14",
+									"description": "Período para cálculo de indicadores (2-200)"
+								}
+							]
+						},
+						"description": "Calcula RSI, SMA y EMA para AAPL con período de 14 días.\n\n**Indicadores:**\n- RSI: Relative Strength Index (0-100)\n- SMA: Simple Moving Average\n- EMA: Exponential Moving Average"
+					},
+					"response": []
+				},
+				{
+					"name": "Calculate Indicators - GOOGL (Period 20)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod/indicators/GOOGL?period=20",
+							"protocol": "https",
+							"host": [
+								"rd99h9lf9h",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"indicators",
+								"GOOGL"
+							],
+							"query": [
+								{
+									"key": "period",
+									"value": "20"
+								}
+							]
+						},
+						"description": "Calcula indicadores para Google con período de 20 días."
+					},
+					"response": []
+				},
+				{
+					"name": "Calculate Indicators - Default Period",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod/indicators/TSLA",
+							"protocol": "https",
+							"host": [
+								"rd99h9lf9h",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"indicators",
+								"TSLA"
+							]
+						},
+						"description": "Calcula indicadores con período por defecto (14 días)."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4. Validation Tests",
+			"description": "Tests de validación de inputs",
+			"item": [
+				{
+					"name": "Invalid Symbol - Empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod/price/",
+							"protocol": "https",
+							"host": [
+								"rd99h9lf9h",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"price",
+								""
+							]
+						},
+						"description": "Test: símbolo vacío debe retornar 400"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Symbol - Too Long",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod/price/ABCDEFGH",
+							"protocol": "https",
+							"host": [
+								"rd99h9lf9h",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"price",
+								"ABCDEFGH"
+							]
+						},
+						"description": "Test: símbolo > 5 caracteres debe retornar 400"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Symbol - With Numbers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod/price/ABC123",
+							"protocol": "https",
+							"host": [
+								"rd99h9lf9h",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"price",
+								"ABC123"
+							]
+						},
+						"description": "Test: símbolo con números debe retornar 400"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod",
+			"type": "string"
+		},
+		{
+			"key": "api_version",
+			"value": "2.0",
+			"type": "string"
+		}
+	]
+}
