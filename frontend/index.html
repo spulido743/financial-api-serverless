@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financial API - Dashboard</title>
+    <title>Financial API Dashboard</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>📈 Financial API Dashboard</h1>
-        <p>API URL: <code id="api-url">https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod</code></p>
+        <h1>Financial API Dashboard</h1>
+        <p>API Endpoint: <code id="api-url">https://rd99h9lf9h.execute-api.us-east-1.amazonaws.com/prod</code></p>
     </header>
 
     <main>
         <!-- Guardar precio -->
         <section class="card">
-            <h2>💾 Guardar Precio</h2>
+            <h2>Guardar Precio</h2>
             <form id="save-price-form">
                 <input type="text" id="symbol-save" placeholder="Símbolo (ej: AAPL)" required>
                 <input type="number" step="0.01" id="price-save" placeholder="Precio (ej: 185.50)" required>
@@ -29,7 +29,7 @@
 
         <!-- Consultar último precio -->
         <section class="card">
-            <h2>🔍 Consultar Último Precio</h2>
+            <h2>Consultar Último Precio</h2>
             <form id="get-price-form">
                 <input type="text" id="symbol-get" placeholder="Símbolo (ej: AAPL)" required>
                 <button type="submit">Consultar</button>
@@ -39,7 +39,7 @@
 
         <!-- Histórico -->
         <section class="card">
-            <h2>📊 Histórico</h2>
+            <h2>Histórico</h2>
             <form id="history-form">
                 <input type="text" id="symbol-history" placeholder="Símbolo (ej: AAPL)" required>
                 <label>Días: <input type="number" id="days-history" value="30" min="1" max="365"></label>
@@ -51,7 +51,7 @@
 
         <!-- Análisis técnico -->
         <section class="card">
-            <h2>📈 Análisis Técnico</h2>
+            <h2>Análisis Técnico</h2>
             <form id="analyze-form">
                 <input type="text" id="symbol-analyze" placeholder="Símbolo (ej: AAPL)" required>
                 <button type="submit">Analizar</button>
@@ -61,14 +61,14 @@
 
         <!-- Portfolio -->
         <section class="card">
-            <h2>💼 Portfolio</h2>
+            <h2>Portfolio</h2>
             <button id="portfolio-btn">Ver Portfolio Completo</button>
             <div id="portfolio-result" class="result"></div>
         </section>
 
         <!-- Fetch desde Alpha Vantage -->
         <section class="card">
-            <h2>🌐 Actualizar desde Alpha Vantage</h2>
+            <h2>Actualizar desde Alpha Vantage</h2>
             <form id="fetch-form">
                 <input type="text" id="symbol-fetch" placeholder="Símbolo (ej: AAPL)" required>
                 <button type="submit">Actualizar Precio</button>
@@ -78,7 +78,7 @@
     </main>
 
     <footer>
-        <p>Financial API Serverless &copy; 2026 | AWS Lambda + API Gateway + DynamoDB</p>
+        <p>Financial API Serverless | AWS Lambda + API Gateway + DynamoDB</p>
     </footer>
 
     <script src="script.js"></script>

@@ -24,7 +24,6 @@ function setLoading(elementId, loading = true) {
         el.className = 'result info';
         console.log(`⏳ Loading activado en ${elementId}`);
     } else {
-        el.textContent = '';
         el.className = 'result';
         console.log(`✅ Loading desactivado en ${elementId}`);
     }
